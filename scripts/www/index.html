@@ -1,11 +1,1170 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PakePlus</title>
-    </head>
-    <body>
-        PakePlus
-    </body>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>车辆贷款计算器</title>
+    <style>
+        /* ... 原有的CSS样式保持不变 ... */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f0f4f8;
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .calculator-container {
+            width: 100%;
+            max-width: 1400px;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .calculator-header {
+            background: linear-gradient(135deg, #3a8ffe 0%, #1a5fd8 100%);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .calculator-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        
+        .calculator-body {
+            padding: 40px;
+        }
+        
+        .input-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid #eaeaea;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title:before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background-color: #3a8ffe;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .input-column {
+            flex: 1;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-label {
+            display: block;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .currency-symbol {
+            position: absolute;
+            left: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #3a8ffe;
+            z-index: 1;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 14px 15px;
+            font-size: 16px;
+            font-weight: 500;
+            border: 2px solid #e1e8f0;
+            border-radius: 10px;
+            transition: all 0.3s;
+            color: #2c3e50;
+            background-color: #fff;
+        }
+        
+        .input-field.with-icon {
+            padding-left: 40px;
+        }
+        
+        .input-field.vehicle-value {
+            padding: 18px 20px 18px 50px;
+            font-size: 24px;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #3a8ffe;
+            box-shadow: 0 0 0 3px rgba(58, 143, 254, 0.2);
+        }
+        
+        .calculate-btn {
+            display: block;
+            width: 100%;
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #3a8ffe 0%, #1a5fd8 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(58, 143, 254, 0.3);
+            margin-bottom: 25px;
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(58, 143, 254, 0.4);
+        }
+        
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+        
+        .vehicle-type-selector {
+            margin-top: 10px;
+        }
+        
+        .vehicle-type-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .vehicle-type-title:before {
+            content: '🚘';
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .vehicle-option {
+            cursor: pointer;
+            border: 2px solid #e1e8f0;
+            border-radius: 10px;
+            padding: 18px 20px;
+            transition: all 0.3s ease;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .vehicle-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(58, 143, 254, 0.15);
+            border-color: #3a8ffe;
+        }
+        
+        .vehicle-option.active {
+            border-color: #3a8ffe;
+            background-color: #f0f7ff;
+            box-shadow: 0 5px 15px rgba(58, 143, 254, 0.2);
+        }
+        
+        .vehicle-icon {
+            font-size: 32px;
+            margin-right: 15px;
+            display: block;
+        }
+        
+        .vehicle-option-content {
+            flex: 1;
+        }
+        
+        .vehicle-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 3px;
+            color: #2c3e50;
+        }
+        
+        .vehicle-desc {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .results-section {
+            margin-top: 40px;
+            position: relative;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .results-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        
+        .results-title:before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background-color: #3a8ffe;
+            margin-right: 12px;
+            border-radius: 2px;
+        }
+        
+        .copy-btn {
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+            background: linear-gradient(135deg, #66BB6A 0%, #388E3C 100%);
+        }
+        
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+        
+        .copy-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #fff 100%);
+            border-radius: 12px;
+            padding: 30px;
+            border-left: 5px solid #3a8ffe;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .result-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #3a8ffe;
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .result-title:before {
+            content: '💰';
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .copy-icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #7f8c9a;
+            transition: color 0.3s;
+            padding: 5px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .copy-icon-btn:hover {
+            color: #3a8ffe;
+            background-color: rgba(58, 143, 254, 0.1);
+        }
+        
+        .copy-icon-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+        
+        .result-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1a5fd8;
+            margin-bottom: 10px;
+        }
+        
+        .result-note {
+            font-size: 14px;
+            color: #7f8c9a;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #e1e8f0;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .vehicle-info-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .vehicle-info-title:before {
+            content: '🚗';
+            margin-right: 10px;
+            font-size: 24px;
+        }
+        
+        /* 错误样式 */
+        .input-field.error {
+            border-color: #ff4757;
+            box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.2);
+        }
+        
+        .error-message {
+            color: #ff4757;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        @media (max-width: 1200px) {
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .input-row {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .calculator-body {
+                padding: 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .calculator-header {
+                padding: 25px 20px;
+            }
+            
+            .calculator-header h1 {
+                font-size: 26px;
+            }
+            
+            .calculator-body {
+                padding: 20px;
+            }
+            
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-field.vehicle-value {
+                font-size: 20px;
+                padding: 15px 15px 15px 45px;
+            }
+            
+            .result-value {
+                font-size: 32px;
+            }
+            
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .vehicle-option {
+                padding: 15px;
+            }
+            
+            .vehicle-icon {
+                font-size: 28px;
+                margin-right: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .calculator-header h1 {
+                font-size: 22px;
+            }
+            
+            .calculator-body {
+                padding: 20px 15px;
+            }
+            
+            .result-value {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <div class="calculator-header">
+            <h1>车辆贷款计算器</h1>
+            <p>快速计算不同车辆类型的贷款额度</p>
+        </div>
+        
+        <div class="calculator-body">
+            <div class="input-section">
+                <div class="section-title">车辆信息</div>
+                
+                <div class="input-row">
+                    <div class="input-column">
+                        <div class="input-group">
+                            <label class="input-label">车辆评估价（元）</label>
+                            <div class="input-container">
+                                <span class="currency-symbol">¥</span>
+                                <input type="number" class="input-field vehicle-value" id="input-value" placeholder="请输入车辆评估价" min="0" step="1000" value="100000">
+                            </div>
+                            <div class="error-message" id="value-error">车辆评估价必须是大于0的正数</div>
+                        </div>
+                        
+                        <button class="calculate-btn" id="calculate-btn">计算贷款额度</button>
+                        
+                        <div class="vehicle-type-selector">
+                            <div class="vehicle-type-title">选择车辆类型</div>
+                            
+                            <div class="vehicle-option active" id="passenger-car">
+                                <span class="vehicle-icon">🚗</span>
+                                <div class="vehicle-option-content">
+                                    <div class="vehicle-name">乘用车</div>
+                                    <div class="vehicle-desc">轿车、SUV、MPV等</div>
+                                </div>
+                            </div>
+                            
+                            <div class="vehicle-option" id="commercial-car">
+                                <span class="vehicle-icon">🚚</span>
+                                <div class="vehicle-option-content">
+                                    <div class="vehicle-name">商用车</div>
+                                    <div class="vehicle-desc">货车、客车、专用车等</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-column">
+                        <div class="vehicle-info-title">车辆详细信息</div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">车辆型号</label>
+                            <div class="input-container">
+                                <input type="text" class="input-field" id="vehicle-model" placeholder="请输入车辆型号">
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">车架号</label>
+                            <div class="input-container">
+                                <input type="text" class="input-field" id="vin-number" placeholder="请输入车辆识别代码">
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">注册日期</label>
+                            <div class="input-container">
+                                <input type="text" class="input-field" id="registration-date" placeholder="格式：20250310 或 2025-3-10" value="">
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">公里数</label>
+                            <div class="input-container">
+                                <input type="number" class="input-field" id="mileage" placeholder="请输入行驶里程（公里）" min="0">
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">评估城市</label>
+                            <div class="input-container">
+                                <input type="text" class="input-field" id="assessment-city" placeholder="请输入评估城市" value="乌鲁木齐">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 乘用车结果区域 -->
+            <div id="passenger-results" class="results-section">
+                <div class="results-header">
+                    <div class="results-title">乘用车贷款额度</div>
+                    <button class="copy-btn" id="copy-all-passenger">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                        </svg>
+                        复制全部结果
+                    </button>
+                </div>
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div class="result-header">
+                            <div class="result-title">36期常规金融产品</div>
+                            <button class="copy-icon-btn" data-copy-target="passenger-regular">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="result-value" id="passenger-regular">¥ --</div>
+                        <div class="result-note">计算公式：评估价×70%+980，若≤6万则用评估价×77%+980，上限6万</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-header">
+                            <div class="result-title">48-60期融资租赁产品</div>
+                            <button class="copy-icon-btn" data-copy-target="passenger-finance">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="result-value" id="passenger-finance">¥ --</div>
+                        <div class="result-note">计算公式：评估价×80%</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-header">
+                            <div class="result-title">优奇贷产品</div>
+                            <button class="copy-icon-btn" data-copy-target="passenger-youqi">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="result-value" id="passenger-youqi">¥ --</div>
+                        <div class="result-note">计算公式：评估价×60%+840，若≤6万则用评估价×66%+840，上限6万</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-header">
+                            <div class="result-title">36期GAP产品</div>
+                            <button class="copy-icon-btn" data-copy-target="passenger-gap">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="result-value" id="passenger-gap">¥ --</div>
+                        <div class="result-note">计算公式：36期常规金融产品 + ¥5,000</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 商用车结果区域 -->
+            <div id="commercial-results" class="results-section hidden">
+                <div class="results-header">
+                    <div class="results-title">商用车贷款额度</div>
+                    <button class="copy-btn" id="copy-all-commercial">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                        </svg>
+                        复制全部结果
+                    </button>
+                </div>
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div class="result-header">
+                            <div class="result-title">36期常规金融产品</div>
+                            <button class="copy-icon-btn" data-copy-target="commercial-regular">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="result-value" id="commercial-regular">¥ --</div>
+                        <div class="result-note">计算公式：评估价×80.5%</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-header">
+                            <div class="result-title">36期融资租赁产品</div>
+                            <button class="copy-icon-btn" data-copy-target="commercial-finance">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="result-value" id="commercial-finance">¥ --</div>
+                        <div class="result-note">计算公式：评估价×100%</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-header">
+                            <div class="result-title">GAP产品</div>
+                            <button class="copy-icon-btn" data-copy-target="commercial-gap">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="result-value" id="commercial-gap">¥ --</div>
+                        <div class="result-note">计算公式：36期常规金融产品 + ¥5,000</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 复制成功提示 -->
+    <div id="toast" class="toast">已复制到剪贴板！</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取DOM元素
+            const passengerCarOption = document.getElementById('passenger-car');
+            const commercialCarOption = document.getElementById('commercial-car');
+            const inputValue = document.getElementById('input-value');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const valueError = document.getElementById('value-error');
+            
+            // 车辆信息输入框
+            const vehicleModel = document.getElementById('vehicle-model');
+            const vinNumber = document.getElementById('vin-number');
+            const registrationDate = document.getElementById('registration-date');
+            const mileage = document.getElementById('mileage');
+            const assessmentCity = document.getElementById('assessment-city');
+            
+            // 结果元素
+            const passengerResults = document.getElementById('passenger-results');
+            const commercialResults = document.getElementById('commercial-results');
+            
+            // 复制按钮
+            const copyAllPassengerBtn = document.getElementById('copy-all-passenger');
+            const copyAllCommercialBtn = document.getElementById('copy-all-commercial');
+            const copyIconBtns = document.querySelectorAll('.copy-icon-btn');
+            
+            // 提示元素
+            const toast = document.getElementById('toast');
+            
+            // 默认选择乘用车
+            let selectedVehicleType = 'passenger';
+            
+            // 存储最后计算的值，用于判断是否需要重新计算
+            let lastCalculatedValue = parseFloat(inputValue.value);
+            
+            // 车辆类型选择事件
+            passengerCarOption.addEventListener('click', function() {
+                selectVehicleType('passenger');
+            });
+            
+            commercialCarOption.addEventListener('click', function() {
+                selectVehicleType('commercial');
+            });
+            
+            // 计算按钮点击事件
+            calculateBtn.addEventListener('click', calculateLoans);
+            
+            // 输入框失焦事件 - 添加自动计算
+            inputValue.addEventListener('blur', function() {
+                // 处理输入格式
+                formatInputValue();
+                // 计算贷款
+                calculateLoans();
+            });
+            
+            // 输入框输入事件 - 处理输入格式并验证
+            inputValue.addEventListener('input', function(e) {
+                // 处理输入格式
+                formatInputValue();
+                // 验证输入值
+                validateInputValue();
+            });
+            
+            // 输入框回车事件
+            inputValue.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    formatInputValue();
+                    calculateLoans();
+                }
+            });
+            
+            // 复制全部结果事件 - 修改为在执行复制前确保已计算
+            copyAllPassengerBtn.addEventListener('click', function() {
+                if (ensureCalculated()) {
+                    copyAllResults('passenger');
+                }
+            });
+            
+            copyAllCommercialBtn.addEventListener('click', function() {
+                if (ensureCalculated()) {
+                    copyAllResults('commercial');
+                }
+            });
+            
+            // 复制单个结果事件 - 修改为在执行复制前确保已计算
+            copyIconBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (ensureCalculated()) {
+                        const targetId = this.getAttribute('data-copy-target');
+                        copySingleResult(targetId);
+                    }
+                });
+            });
+            
+            // 处理输入格式函数
+            function formatInputValue() {
+                let value = inputValue.value;
+                
+                // 如果输入为空，直接返回
+                if (value === '') return;
+                
+                // 检查是否以0开头且不是小数形式（如0.123）
+                if (value.length > 1 && value[0] === '0' && value[1] !== '.') {
+                    // 去除开头的所有0
+                    let newValue = value.replace(/^0+/, '');
+                    
+                    // 如果去除后为空字符串，设置为'0'
+                    if (newValue === '') {
+                        newValue = '0';
+                    }
+                    
+                    // 更新输入框值
+                    inputValue.value = newValue;
+                }
+            }
+            
+            // 验证输入值
+            function validateInputValue() {
+                const value = inputValue.value.trim();
+                
+                if (value === '') {
+                    clearError();
+                    return false;
+                }
+                
+                const numValue = parseFloat(value);
+                
+                if (isNaN(numValue) || numValue <= 0) {
+                    showError();
+                    return false;
+                }
+                
+                clearError();
+                return true;
+            }
+            
+            // 显示错误提示
+            function showError() {
+                inputValue.classList.add('error');
+                valueError.classList.add('show');
+            }
+            
+            // 清除错误提示
+            function clearError() {
+                inputValue.classList.remove('error');
+                valueError.classList.remove('show');
+            }
+            
+            // 确保已计算函数
+            function ensureCalculated() {
+                const currentValue = parseFloat(inputValue.value);
+                
+                // 验证输入值
+                if (!validateInputValue()) {
+                    // 移除弹窗提醒，只显示错误样式
+                    inputValue.focus();
+                    inputValue.select();
+                    return false;
+                }
+                
+                // 如果值已改变或结果还未计算，则重新计算
+                if (currentValue !== lastCalculatedValue || isResultsEmpty()) {
+                    calculateLoans();
+                }
+                
+                return true;
+            }
+            
+            // 检查结果是否为空（未计算）
+            function isResultsEmpty() {
+                if (selectedVehicleType === 'passenger') {
+                    const regularValue = document.getElementById('passenger-regular').textContent;
+                    return regularValue === '¥ --';
+                } else {
+                    const regularValue = document.getElementById('commercial-regular').textContent;
+                    return regularValue === '¥ --';
+                }
+            }
+            
+            // 选择车辆类型函数
+            function selectVehicleType(type) {
+                selectedVehicleType = type;
+                
+                // 更新UI
+                if (type === 'passenger') {
+                    passengerCarOption.classList.add('active');
+                    commercialCarOption.classList.remove('active');
+                    passengerResults.classList.remove('hidden');
+                    commercialResults.classList.add('hidden');
+                } else {
+                    passengerCarOption.classList.remove('active');
+                    commercialCarOption.classList.add('active');
+                    passengerResults.classList.add('hidden');
+                    commercialResults.classList.remove('hidden');
+                }
+                
+                // 重新计算
+                calculateLoans();
+            }
+            
+            // 计算贷款额度函数
+            function calculateLoans() {
+                // 确保输入框格式正确
+                formatInputValue();
+                
+                const value = parseFloat(inputValue.value);
+                
+                // 验证输入
+                if (!validateInputValue()) {
+                    // 移除弹窗提醒，只显示错误样式
+                    inputValue.focus();
+                    inputValue.select();
+                    clearResults();
+                    return;
+                }
+                
+                // 更新最后计算的值
+                lastCalculatedValue = value;
+                
+                if (selectedVehicleType === 'passenger') {
+                    // 计算乘用车贷款额度
+                    calculatePassengerLoans(value);
+                } else {
+                    // 计算商用车贷款额度
+                    calculateCommercialLoans(value);
+                }
+            }
+            
+            // 清空结果显示
+            function clearResults() {
+                if (selectedVehicleType === 'passenger') {
+                    document.getElementById('passenger-regular').textContent = '¥ --';
+                    document.getElementById('passenger-finance').textContent = '¥ --';
+                    document.getElementById('passenger-youqi').textContent = '¥ --';
+                    document.getElementById('passenger-gap').textContent = '¥ --';
+                } else {
+                    document.getElementById('commercial-regular').textContent = '¥ --';
+                    document.getElementById('commercial-finance').textContent = '¥ --';
+                    document.getElementById('commercial-gap').textContent = '¥ --';
+                }
+            }
+            
+            // 计算乘用车贷款额度
+            function calculatePassengerLoans(value) {
+                // 1. 36期常规金融产品
+                let regularLoan = value * 0.7 + 980;
+                if (regularLoan <= 60000) {
+                    regularLoan = value * 0.77 + 980;
+                    if (regularLoan > 60000) {
+                        regularLoan = 60000;
+                    }
+                }
+                
+                // 2. 48-60期融资租赁产品
+                const financeLease = value * 0.8;
+                
+                // 3. 优奇贷产品
+                let youqiLoan = value * 0.6 + 840;
+                if (youqiLoan <= 60000) {
+                    youqiLoan = value * 0.66 + 840;
+                    if (youqiLoan > 60000) {
+                        youqiLoan = 60000;
+                    }
+                }
+                
+                // 4. 36期GAP产品
+                const gapLoan = regularLoan + 5000;
+                
+                // 更新显示结果
+                document.getElementById('passenger-regular').textContent = formatCurrency(regularLoan);
+                document.getElementById('passenger-finance').textContent = formatCurrency(financeLease);
+                document.getElementById('passenger-youqi').textContent = formatCurrency(youqiLoan);
+                document.getElementById('passenger-gap').textContent = formatCurrency(gapLoan);
+            }
+            
+            // 计算商用车贷款额度
+            function calculateCommercialLoans(value) {
+                // 1. 36期常规金融产品
+                const regularProduct = value * 0.805;
+                
+                // 2. 36期融资租赁产品（100%）
+                const financeLease = value;
+                
+                // 3. GAP产品
+                const gapLoan = regularProduct + 5000;
+                
+                // 更新显示结果
+                document.getElementById('commercial-regular').textContent = formatCurrency(regularProduct);
+                document.getElementById('commercial-finance').textContent = formatCurrency(financeLease);
+                document.getElementById('commercial-gap').textContent = formatCurrency(gapLoan);
+            }
+            
+            // 格式化货币显示
+            function formatCurrency(amount) {
+                return '¥ ' + amount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            }
+            
+            // 解析日期字符串
+            function parseDate(dateString) {
+                if (!dateString) return '未填写';
+                
+                // 尝试多种日期格式
+                let year, month, day;
+                
+                // 格式1: YYYYMMDD (如: 20250310)
+                if (/^\d{8}$/.test(dateString)) {
+                    year = dateString.substring(0, 4);
+                    month = dateString.substring(4, 6);
+                    day = dateString.substring(6, 8);
+                }
+                // 格式2: YYYY-MM-DD 或 YYYY-M-D (如: 2025-3-10)
+                else if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(dateString)) {
+                    const parts = dateString.split('-');
+                    year = parts[0];
+                    month = parts[1].padStart(2, '0');
+                    day = parts[2].padStart(2, '0');
+                }
+                // 格式3: YYYY/MM/DD 或 YYYY/M/D (如: 2025/3/10)
+                else if (/^\d{4}\/\d{1,2}\/\d{1,2}$/.test(dateString)) {
+                    const parts = dateString.split('/');
+                    year = parts[0];
+                    month = parts[1].padStart(2, '0');
+                    day = parts[2].padStart(2, '0');
+                }
+                // 格式4: YYYY年MM月DD日 (如: 2025年03月10日)
+                else if (/^\d{4}年\d{1,2}月\d{1,2}日$/.test(dateString)) {
+                    const parts = dateString.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
+                    year = parts[1];
+                    month = parts[2].padStart(2, '0');
+                    day = parts[3].padStart(2, '0');
+                }
+                // 无法识别的格式，返回原始字符串
+                else {
+                    return dateString;
+                }
+                
+                // 验证日期是否有效
+                const date = new Date(`${year}-${month}-${day}`);
+                if (isNaN(date.getTime())) {
+                    return dateString;
+                }
+                
+                return `${year}年${month}月${day}日`;
+            }
+            
+            // 获取车辆类型中文名称
+            function getVehicleTypeName(type) {
+                return type === 'passenger' ? '乘用车' : '商用车';
+            }
+            
+            // 创建短分隔线
+            function createSeparator(title) {
+                const lineLength = 10;
+                const titleLength = title.length;
+                const sideLength = Math.floor((lineLength - titleLength) / 2);
+                const leftSide = '─'.repeat(sideLength);
+                const rightSide = '─'.repeat(lineLength - titleLength - sideLength);
+                return `${leftSide}${title}${rightSide}`;
+            }
+            
+            // 复制全部结果
+            function copyAllResults(vehicleType) {
+                const value = parseFloat(inputValue.value);
+                const formattedValue = '¥ ' + value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                
+                let copyText = '';
+                
+                // 添加奇瑞系统融资评估方案标题
+                copyText += `\n${createSeparator('奇瑞系统融资评估方案')}\n\n`;
+                
+                // 添加车辆评估价（直接放在方案标题后面，不单独成节）
+                copyText += `车辆评估价：${formattedValue}\n\n`;
+                
+                // 添加贷款计算结果标题
+                copyText += `贷款方案\n`;
+                copyText += `${'─'.repeat(14)}\n`;
+                
+                // 添加贷款方案内容，每个产品之间加空行
+                if (vehicleType === 'passenger') {
+                    copyText += `36期常规金融产品：${document.getElementById('passenger-regular').textContent}\n\n`;
+                    copyText += `48-60期融资租赁产品：${document.getElementById('passenger-finance').textContent}\n\n`;
+                    copyText += `优奇贷产品：${document.getElementById('passenger-youqi').textContent}\n\n`;
+                    copyText += `36期GAP产品：${document.getElementById('passenger-gap').textContent}\n`;
+                } else {
+                    copyText += `36期常规金融产品：${document.getElementById('commercial-regular').textContent}\n\n`;
+                    copyText += `36期融资租赁产品：${document.getElementById('commercial-finance').textContent}\n\n`;
+                    copyText += `GAP产品：${document.getElementById('commercial-gap').textContent}\n`;
+                }
+                
+                // 添加车辆信息
+                copyText += `\n车辆信息\n`;
+                copyText += `${'─'.repeat(14)}\n`;
+                copyText += `车辆类型：${getVehicleTypeName(vehicleType)}\n`;
+                copyText += `车辆型号：${vehicleModel.value || '未填写'}\n`;
+                copyText += `车架号：${vinNumber.value || '未填写'}\n`;
+                copyText += `注册日期：${parseDate(registrationDate.value)}\n`;
+                copyText += `公里数：${mileage.value ? mileage.value + '公里' : '未填写'}\n`;
+                copyText += `评估城市：${assessmentCity.value || '未填写'}\n`;
+                
+                copyText += `\n${'─'.repeat(14)}\n`;
+                copyText += `评估时间：${new Date().toLocaleString('zh-CN')}\n`;
+                
+                // 复制到剪贴板
+                copyToClipboard(copyText);
+            }
+            
+            // 复制单个结果
+            function copySingleResult(targetId) {
+                const element = document.getElementById(targetId);
+                const title = element.closest('.result-card').querySelector('.result-title').textContent;
+                const value = element.textContent;
+                
+                const copyText = `${title}：${value}`;
+                
+                // 复制到剪贴板
+                copyToClipboard(copyText);
+            }
+            
+            // 复制到剪贴板
+            function copyToClipboard(text) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast();
+                }).catch(err => {
+                    console.error('复制失败: ', err);
+                    // 降级方案：使用旧的复制方法
+                    const textArea = document.createElement('textarea');
+                    textArea.value = text;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    showToast();
+                });
+            }
+            
+            // 显示提示
+            function showToast() {
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            }
+            
+            // 初始化计算
+            calculateLoans();
+        });
+    </script>
+</body>
 </html>
