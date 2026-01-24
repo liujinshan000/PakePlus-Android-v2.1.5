@@ -102,6 +102,7 @@
             padding: 15px;
             margin-bottom: 20px;
             border: 1px solid #eaeaea;
+            position: relative;
         }
         
         .section-title {
@@ -120,6 +121,39 @@
             background-color: #3a8ffe;
             margin-right: 8px;
             border-radius: 2px;
+        }
+        
+        /* 重置按钮样式 */
+        .reset-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 6px rgba(255, 152, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 10;
+        }
+        
+        .reset-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(255, 152, 0, 0.4);
+            background: linear-gradient(135deg, #ffb74d 0%, #ff9800 100%);
+        }
+        
+        .reset-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: white;
         }
         
         .input-group {
@@ -173,30 +207,9 @@
             box-shadow: 0 0 0 3px rgba(58, 143, 254, 0.2);
         }
         
-        /* 计算按钮 - 放在车辆评估价下面 */
+        /* 计算按钮 - 隐藏（改为自动计算） */
         .calculate-btn {
-            display: block;
-            width: 100%;
-            padding: 14px 20px;
-            font-size: 16px;
-            font-weight: 600;
-            background: linear-gradient(135deg, #3a8ffe 0%, #1a5fd8 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(58, 143, 254, 0.3);
-            margin: 0 0 20px 0;
-        }
-        
-        .calculate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(58, 143, 254, 0.4);
-        }
-        
-        .calculate-btn:active {
-            transform: translateY(0);
+            display: none;
         }
         
         /* 车辆详细信息标题 */
@@ -213,6 +226,97 @@
             content: '🚗';
             margin-right: 8px;
             font-size: 18px;
+        }
+        
+        /* 打折选项样式 */
+        .discount-option-container {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            padding: 12px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #eaeaea;
+            display: none;
+        }
+        
+        .discount-option-container.show {
+            display: block;
+        }
+        
+        .discount-option {
+            cursor: pointer;
+            border: 2px solid #e1e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            transition: all 0.3s ease;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+        }
+        
+        .discount-option.active {
+            border-color: #ff9800;
+            background-color: #fff3e0;
+            box-shadow: 0 3px 8px rgba(255, 152, 0, 0.2);
+        }
+        
+        .discount-icon {
+            font-size: 20px;
+            margin-right: 10px;
+            display: block;
+        }
+        
+        .discount-option-content {
+            flex: 1;
+        }
+        
+        .discount-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+            color: #2c3e50;
+        }
+        
+        .discount-desc {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        /* 打折原因输入框 */
+        .discount-reason-container {
+            margin-top: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .discount-reason-container.hidden {
+            display: none;
+        }
+        
+        /* 车龄显示样式 */
+        .vehicle-age-display {
+            position: absolute;
+            right: 12px;
+            font-size: 12px;
+            color: #3a8ffe;
+            font-weight: 500;
+            background-color: rgba(58, 143, 254, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+        
+        /* 车龄大于等于12年时的红色警示样式 */
+        .vehicle-age-display.over-12-years {
+            color: #ff4757;
+            background-color: rgba(255, 71, 87, 0.1);
+            font-weight: 600;
+        }
+        
+        /* 日期错误时的红色警示样式 */
+        .vehicle-age-display.date-error {
+            color: #ff4757;
+            background-color: rgba(255, 71, 87, 0.1);
+            font-weight: 600;
         }
         
         /* 结果区域 - 竖版 */
@@ -459,15 +563,30 @@
                 margin-bottom: 18px;
             }
             
-            .calculate-btn {
-                padding: 16px 20px;
-                font-size: 17px;
-                margin: 0 0 25px 0;
+            .reset-btn {
+                padding: 8px 16px;
+                font-size: 14px;
             }
             
             .vehicle-info-title {
                 font-size: 18px;
                 margin-bottom: 18px;
+            }
+            
+            .discount-option {
+                padding: 15px;
+            }
+            
+            .discount-icon {
+                font-size: 24px;
+            }
+            
+            .discount-name {
+                font-size: 16px;
+            }
+            
+            .discount-desc {
+                font-size: 13px;
             }
             
             .results-title {
@@ -496,6 +615,16 @@
             
             .input-section {
                 padding: 12px;
+            }
+            
+            .reset-btn {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-top: 10px;
+                align-self: flex-start;
+                width: 100%;
+                justify-content: center;
             }
             
             .result-value {
@@ -584,6 +713,14 @@
             <div class="input-section">
                 <div class="section-title">车辆信息</div>
                 
+                <!-- 重置按钮 -->
+                <button class="reset-btn" id="reset-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+                    </svg>
+                    重置所有信息
+                </button>
+                
                 <div class="input-group">
                     <label class="input-label">车辆评估价（元）</label>
                     <div class="input-container">
@@ -593,8 +730,28 @@
                     <div class="error-message" id="value-error">车辆评估价必须是大于0的正数</div>
                 </div>
                 
-                <!-- 计算按钮放在车辆评估价输入框下面 -->
-                <button class="calculate-btn" id="calculate-btn">计算贷款额度</button>
+                <!-- 隐藏的计算按钮 -->
+                <button class="calculate-btn" id="calculate-btn" style="display: none;">计算贷款额度</button>
+                
+                <!-- 乘用车打折选项 -->
+                <div class="discount-option-container" id="discount-container">
+                    <div class="discount-option" id="discount-option">
+                        <span class="discount-icon">🔖</span>
+                        <div class="discount-option-content">
+                            <div class="discount-name">评估价格打折</div>
+                            <div class="discount-desc">选择后评估价将按照80%计算</div>
+                        </div>
+                    </div>
+                    
+                    <div class="discount-reason-container hidden" id="discount-reason-container">
+                        <div class="input-group">
+                            <label class="input-label">打折原因</label>
+                            <div class="input-container">
+                                <input type="text" class="input-field" id="discount-reason" placeholder="请输入打折原因" value="车龄超过12年">
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
                 <!-- 车辆详细信息 -->
                 <div class="vehicle-info-title">车辆详细信息</div>
@@ -616,7 +773,8 @@
                 <div class="input-group">
                     <label class="input-label">注册日期</label>
                     <div class="input-container">
-                        <input type="text" class="input-field" id="registration-date" placeholder="格式：20250310 或 2025-3-10" value="">
+                        <input type="text" class="input-field" id="registration-date" placeholder="请输入首次注册日期" value="">
+                        <div class="vehicle-age-display" id="vehicle-age-display"></div>
                     </div>
                 </div>
                 
@@ -630,7 +788,7 @@
                 <div class="input-group">
                     <label class="input-label">评估城市</label>
                     <div class="input-container">
-                        <input type="text" class="input-field" id="assessment-city" placeholder="请输入评估城市" value="乌鲁木齐">
+                        <input type="text" class="input-field" id="assessment-city" placeholder="请输入评估城市" value="乌鲁木齐市">
                     </div>
                 </div>
             </div>
@@ -775,6 +933,13 @@
             const mileage = document.getElementById('mileage');
             const assessmentCity = document.getElementById('assessment-city');
             
+            // 打折相关元素
+            const discountContainer = document.getElementById('discount-container');
+            const discountOption = document.getElementById('discount-option');
+            const discountReasonContainer = document.getElementById('discount-reason-container');
+            const discountReasonInput = document.getElementById('discount-reason');
+            const vehicleAgeDisplay = document.getElementById('vehicle-age-display');
+            
             // 结果元素
             const passengerResults = document.getElementById('passenger-results');
             const commercialResults = document.getElementById('commercial-results');
@@ -784,11 +949,15 @@
             const copyAllCommercialBtn = document.getElementById('copy-all-commercial');
             const copyIconBtns = document.querySelectorAll('.copy-icon-btn');
             
+            // 重置按钮
+            const resetBtn = document.getElementById('reset-btn');
+            
             // 提示元素
             const toast = document.getElementById('toast');
             
             // 默认选择乘用车
             let selectedVehicleType = 'passenger';
+            let discountApplied = false; // 打折是否应用
             
             // 存储最后计算的值，用于判断是否需要重新计算
             let lastCalculatedValue = parseFloat(inputValue.value);
@@ -802,23 +971,22 @@
                 selectVehicleType('commercial');
             });
             
-            // 计算按钮点击事件
-            calculateBtn.addEventListener('click', calculateLoans);
-            
-            // 输入框失焦事件 - 添加自动计算
-            inputValue.addEventListener('blur', function() {
-                // 处理输入格式
-                formatInputValue();
-                // 计算贷款
-                calculateLoans();
-            });
-            
-            // 输入框输入事件 - 处理输入格式并验证
+            // 输入框输入事件 - 处理输入格式并验证和自动计算
             inputValue.addEventListener('input', function(e) {
                 // 处理输入格式
                 formatInputValue();
                 // 验证输入值
                 validateInputValue();
+                // 自动计算贷款
+                calculateLoans();
+            });
+            
+            // 输入框失焦事件 - 自动计算
+            inputValue.addEventListener('blur', function() {
+                // 处理输入格式
+                formatInputValue();
+                // 自动计算贷款
+                calculateLoans();
             });
             
             // 输入框回车事件
@@ -827,6 +995,57 @@
                     formatInputValue();
                     calculateLoans();
                 }
+            });
+            
+            // 注册日期输入事件 - 计算车龄
+            registrationDate.addEventListener('input', function() {
+                calculateVehicleAge();
+                // 自动计算贷款
+                calculateLoans();
+            });
+            
+            registrationDate.addEventListener('blur', function() {
+                calculateVehicleAge();
+                // 自动计算贷款
+                calculateLoans();
+            });
+            
+            // 其他输入框变化时也自动计算
+            vehicleModel.addEventListener('input', function() {
+                calculateLoans();
+            });
+            
+            vinNumber.addEventListener('input', function() {
+                calculateLoans();
+            });
+            
+            mileage.addEventListener('input', function() {
+                calculateLoans();
+            });
+            
+            assessmentCity.addEventListener('input', function() {
+                calculateLoans();
+            });
+            
+            // 打折选项点击事件
+            discountOption.addEventListener('click', function() {
+                discountApplied = !discountApplied;
+                
+                if (discountApplied) {
+                    discountOption.classList.add('active');
+                    discountReasonContainer.classList.remove('hidden');
+                } else {
+                    discountOption.classList.remove('active');
+                    discountReasonContainer.classList.add('hidden');
+                }
+                
+                // 自动计算贷款
+                calculateLoans();
+            });
+            
+            // 打折原因输入事件 - 自动计算
+            discountReasonInput.addEventListener('input', function() {
+                calculateLoans();
             });
             
             // 复制全部结果事件
@@ -850,6 +1069,13 @@
                         copySingleResult(targetId);
                     }
                 });
+            });
+            
+            // 重置按钮点击事件
+            resetBtn.addEventListener('click', function() {
+                resetAllInputs();
+                // 显示重置成功的提示
+                showToast('已重置所有信息到初始状态');
             });
             
             // 处理输入格式函数
@@ -937,6 +1163,43 @@
                 }
             }
             
+            // 重置所有输入函数
+            function resetAllInputs() {
+                // 1. 重置车辆评估价
+                inputValue.value = '100000';
+                
+                // 2. 重置车辆类型选择（默认乘用车）
+                selectVehicleType('passenger');
+                
+                // 3. 重置车辆详细信息
+                vehicleModel.value = '';
+                vinNumber.value = '';
+                registrationDate.value = '';
+                mileage.value = '';
+                assessmentCity.value = '乌鲁木齐';
+                
+                // 4. 重置打折选项
+                discountApplied = false;
+                discountOption.classList.remove('active');
+                discountReasonContainer.classList.add('hidden');
+                discountReasonInput.value = '车龄超过12年';
+                
+                // 5. 清除错误状态
+                clearError();
+                inputValue.classList.remove('error');
+                registrationDate.classList.remove('error');
+                vehicleAgeDisplay.classList.remove('date-error');
+                vehicleAgeDisplay.classList.remove('over-12-years');
+                vehicleAgeDisplay.textContent = '';
+                
+                // 6. 重新计算贷款
+                lastCalculatedValue = 100000;
+                calculateLoans();
+                
+                // 7. 滚动到顶部，以便用户看到重置效果
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
             // 选择车辆类型函数
             function selectVehicleType(type) {
                 selectedVehicleType = type;
@@ -947,15 +1210,158 @@
                     commercialCarOption.classList.remove('active');
                     passengerResults.classList.remove('hidden');
                     commercialResults.classList.add('hidden');
+                    // 显示打折选项
+                    discountContainer.classList.add('show');
                 } else {
                     passengerCarOption.classList.remove('active');
                     commercialCarOption.classList.add('active');
                     passengerResults.classList.add('hidden');
                     commercialResults.classList.remove('hidden');
+                    // 隐藏打折选项
+                    discountContainer.classList.remove('show');
+                    // 重置打折状态
+                    discountApplied = false;
+                    discountOption.classList.remove('active');
+                    discountReasonContainer.classList.add('hidden');
                 }
                 
-                // 重新计算
+                // 自动计算贷款
                 calculateLoans();
+            }
+            
+            // 验证日期是否有效
+            function isValidDate(year, month, day) {
+                // 验证月份是否有效（1-12）
+                if (month < 1 || month > 12) {
+                    return false;
+                }
+                
+                // 验证日期是否有效
+                const daysInMonth = new Date(year, month, 0).getDate();
+                if (day < 1 || day > daysInMonth) {
+                    return false;
+                }
+                
+                // 验证年份是否合理（1900-当前年份+1）
+                const currentYear = new Date().getFullYear();
+                if (year < 1900 || year > currentYear + 1) {
+                    return false;
+                }
+                
+                return true;
+            }
+            
+            // 计算车辆年龄函数
+            function calculateVehicleAge() {
+                const dateString = registrationDate.value.trim();
+                if (!dateString) {
+                    vehicleAgeDisplay.textContent = '';
+                    vehicleAgeDisplay.classList.remove('over-12-years');
+                    vehicleAgeDisplay.classList.remove('date-error');
+                    registrationDate.classList.remove('error');
+                    return;
+                }
+                
+                // 解析日期
+                const parsedResult = parseDateForAge(dateString);
+                if (!parsedResult || !parsedResult.date || isNaN(parsedResult.date.getTime())) {
+                    vehicleAgeDisplay.textContent = '日期无效';
+                    vehicleAgeDisplay.classList.remove('over-12-years');
+                    vehicleAgeDisplay.classList.add('date-error');
+                    registrationDate.classList.add('error');
+                    return;
+                }
+                
+                const { date, year, month, day } = parsedResult;
+                
+                // 验证日期是否有效
+                if (!isValidDate(year, month, day)) {
+                    vehicleAgeDisplay.textContent = '日期无效';
+                    vehicleAgeDisplay.classList.remove('over-12-years');
+                    vehicleAgeDisplay.classList.add('date-error');
+                    registrationDate.classList.add('error');
+                    return;
+                }
+                
+                // 日期有效，清除错误状态
+                registrationDate.classList.remove('error');
+                vehicleAgeDisplay.classList.remove('date-error');
+                
+                // 计算车龄
+                const now = new Date();
+                let years = now.getFullYear() - date.getFullYear();
+                let months = now.getMonth() - date.getMonth();
+                let days = now.getDate() - date.getDate();
+                
+                // 调整月份和日期
+                if (days < 0) {
+                    months--;
+                    // 获取上个月的天数
+                    const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                    days += lastMonth.getDate();
+                }
+                
+                if (months < 0) {
+                    years--;
+                    months += 12;
+                }
+                
+                // 显示车龄
+                vehicleAgeDisplay.textContent = `${years}年${months}月${days}天`;
+                
+                // 如果车龄大于等于12年，添加红色警示样式
+                if (years >= 12) {
+                    vehicleAgeDisplay.classList.add('over-12-years');
+                } else {
+                    vehicleAgeDisplay.classList.remove('over-12-years');
+                }
+            }
+            
+            // 解析日期用于计算车龄
+            function parseDateForAge(dateString) {
+                let year, month, day;
+                
+                // 格式1: YYYYMMDD (如: 20250310)
+                if (/^\d{8}$/.test(dateString)) {
+                    year = parseInt(dateString.substring(0, 4));
+                    month = parseInt(dateString.substring(4, 6));
+                    day = parseInt(dateString.substring(6, 8));
+                }
+                // 格式2: YYYY-MM-DD 或 YYYY-M-D (如: 2025-3-10)
+                else if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(dateString)) {
+                    const parts = dateString.split('-');
+                    year = parseInt(parts[0]);
+                    month = parseInt(parts[1]);
+                    day = parseInt(parts[2]);
+                }
+                // 格式3: YYYY/MM/DD 或 YYYY/M/D (如: 2025/3/10)
+                else if (/^\d{4}\/\d{1,2}\/\d{1,2}$/.test(dateString)) {
+                    const parts = dateString.split('/');
+                    year = parseInt(parts[0]);
+                    month = parseInt(parts[1]);
+                    day = parseInt(parts[2]);
+                }
+                // 格式4: YYYY年MM月DD日 (如: 2025年03月10日)
+                else if (/^\d{4}年\d{1,2}月\d{1,2}日$/.test(dateString)) {
+                    const parts = dateString.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
+                    year = parseInt(parts[1]);
+                    month = parseInt(parts[2]);
+                    day = parseInt(parts[3]);
+                }
+                // 无法识别的格式
+                else {
+                    return null;
+                }
+                
+                // 检查解析出的数值是否有效
+                if (isNaN(year) || isNaN(month) || isNaN(day)) {
+                    return null;
+                }
+                
+                // 创建Date对象（注意月份从0开始）
+                const date = new Date(year, month - 1, day);
+                
+                return { date, year, month, day };
             }
             
             // 计算贷款额度函数
@@ -963,45 +1369,39 @@
                 // 确保输入框格式正确
                 formatInputValue();
                 
-                const value = parseFloat(inputValue.value);
+                let value = parseFloat(inputValue.value);
                 
                 // 验证输入
                 if (!validateInputValue()) {
-                    // 移除弹窗提醒，只显示错误样式
+                    // 只显示错误样式，不清除结果
                     inputValue.focus();
                     inputValue.select();
-                    clearResults();
                     return;
                 }
+                
+                // 计算车龄
+                calculateVehicleAge();
                 
                 // 更新最后计算的值
                 lastCalculatedValue = value;
                 
                 if (selectedVehicleType === 'passenger') {
+                    // 如果打折选项被选中，评估价按80%计算
+                    let displayValue = value;
+                    if (discountApplied) {
+                        value = value * 0.8;
+                    }
+                    
                     // 计算乘用车贷款额度
-                    calculatePassengerLoans(value);
+                    calculatePassengerLoans(value, displayValue);
                 } else {
                     // 计算商用车贷款额度
                     calculateCommercialLoans(value);
                 }
             }
             
-            // 清空结果显示
-            function clearResults() {
-                if (selectedVehicleType === 'passenger') {
-                    document.getElementById('passenger-regular').textContent = '¥ --';
-                    document.getElementById('passenger-finance').textContent = '¥ --';
-                    document.getElementById('passenger-youqi').textContent = '¥ --';
-                    document.getElementById('passenger-gap').textContent = '¥ --';
-                } else {
-                    document.getElementById('commercial-regular').textContent = '¥ --';
-                    document.getElementById('commercial-finance').textContent = '¥ --';
-                    document.getElementById('commercial-gap').textContent = '¥ --';
-                }
-            }
-            
             // 计算乘用车贷款额度
-            function calculatePassengerLoans(value) {
+            function calculatePassengerLoans(value, displayValue) {
                 // 1. 36期常规金融产品
                 let regularLoan = value * 0.7 + 980;
                 if (regularLoan <= 60000) {
@@ -1031,6 +1431,9 @@
                 document.getElementById('passenger-finance').textContent = formatCurrency(financeLease);
                 document.getElementById('passenger-youqi').textContent = formatCurrency(youqiLoan);
                 document.getElementById('passenger-gap').textContent = formatCurrency(gapLoan);
+                
+                // 保存显示值用于复制
+                window.lastDisplayValue = displayValue;
             }
             
             // 计算商用车贷款额度
@@ -1048,6 +1451,9 @@
                 document.getElementById('commercial-regular').textContent = formatCurrency(regularProduct);
                 document.getElementById('commercial-finance').textContent = formatCurrency(financeLease);
                 document.getElementById('commercial-gap').textContent = formatCurrency(gapLoan);
+                
+                // 保存显示值用于复制
+                window.lastDisplayValue = value;
             }
             
             // 格式化货币显示
@@ -1120,7 +1526,7 @@
             
             // 复制全部结果
             function copyAllResults(vehicleType) {
-                const value = parseFloat(inputValue.value);
+                const value = window.lastDisplayValue || parseFloat(inputValue.value);
                 const formattedValue = '¥ ' + value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
                 
                 let copyText = '';
@@ -1128,8 +1534,18 @@
                 // 添加奇瑞系统融资评估方案标题
                 copyText += `\n${createSeparator('奇瑞系统融资评估方案')}\n\n`;
                 
-                // 添加车辆评估价（直接放在方案标题后面，不单独成节）
-                copyText += `车辆评估价：${formattedValue}\n\n`;
+                // 添加车辆评估价
+                copyText += `车辆评估价：${formattedValue}\n`;
+                
+                // 如果是乘用车且打折，添加打折信息
+                if (vehicleType === 'passenger' && discountApplied) {
+                    const discountedValue = value * 0.8;
+                    const discountedFormattedValue = '¥ ' + discountedValue.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                    copyText += `\n评估价*80%：${discountedFormattedValue}\n`;
+                    copyText += `打折原因：${discountReasonInput.value || '未填写'}\n`;
+                }
+                
+                copyText += `\n`;
                 
                 // 添加贷款计算结果标题
                 copyText += `贷款方案\n`;
@@ -1179,7 +1595,7 @@
             // 复制到剪贴板
             function copyToClipboard(text) {
                 navigator.clipboard.writeText(text).then(() => {
-                    showToast();
+                    showToast('已复制到剪贴板！');
                 }).catch(err => {
                     console.error('复制失败: ', err);
                     // 降级方案：使用旧的复制方法
@@ -1189,12 +1605,13 @@
                     textArea.select();
                     document.execCommand('copy');
                     document.body.removeChild(textArea);
-                    showToast();
+                    showToast('已复制到剪贴板！');
                 });
             }
             
             // 显示提示
-            function showToast() {
+            function showToast(message) {
+                toast.textContent = message;
                 toast.classList.add('show');
                 setTimeout(() => {
                     toast.classList.remove('show');
@@ -1203,6 +1620,8 @@
             
             // 初始化计算
             calculateLoans();
+            // 初始显示打折选项（因为默认选择乘用车）
+            discountContainer.classList.add('show');
         });
     </script>
 </body>
